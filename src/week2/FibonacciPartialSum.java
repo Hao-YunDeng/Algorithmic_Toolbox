@@ -11,7 +11,7 @@ public class FibonacciPartialSum {
 
         for (long i = 0; i <= to; ++i) {
             if (i >= from) {
-                sum += current;
+                sum += current % 10;
             }
 
             long new_current = next;
@@ -22,11 +22,22 @@ public class FibonacciPartialSum {
         return sum % 10;
     }
     
+    public static long getFibonacciPartialSumFast(long from, long to) {
+    	long sum1 = FibonacciSumLastDigit.getFibonacciSumFast(from - 1);
+    	long sum2 = FibonacciSumLastDigit.getFibonacciSumFast(to);
+    	long sum = sum2 - sum1;
+    	if(sum < 0) {
+    		sum += 10;
+    	}
+    	return sum;
+    }
+    
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         long from = scanner.nextLong();
         long to = scanner.nextLong();
         System.out.println(getFibonacciPartialSumNaive(from, to));
+        System.out.println(getFibonacciPartialSumFast(from, to));
     }
 }
 
