@@ -38,6 +38,28 @@ public class CoveringSegments {
         return points;
     }
     
+    private static int[] optimalPointsForLoop(Segment[] segments) {
+    	List<Integer> pointList = new ArrayList<Integer>();
+    	Arrays.sort(segments, new segmentComparator());
+    	
+    	int lastPoint = segments[0].end;
+    	pointList.add(lastPoint);
+    	
+    	for(int i = 1; i < segments.length; i++) {
+    		
+    		if(segments[i].start > lastPoint) {
+    			lastPoint = segments[i].end;
+    			pointList.add(lastPoint);   			
+    		}
+    	}
+    	
+        int[] points = new int[pointList.size()];
+        for (int i = 0; i < pointList.size(); i++) {
+            points[i] = pointList.get(i);
+        }
+        return points;
+    }
+    
     public static class segmentComparator implements Comparator<Segment> {
     	 
         @Override
@@ -64,7 +86,8 @@ public class CoveringSegments {
             end = scanner.nextInt();
             segments[i] = new Segment(start, end);
         }
-        int[] points = optimalPointsHaoyun(segments);
+        //int[] points = optimalPointsHaoyun(segments);
+        int[] points = optimalPointsForLoop(segments);
         System.out.println(points.length);
         for (int point : points) {
             System.out.print(point + " ");

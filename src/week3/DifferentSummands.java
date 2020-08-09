@@ -7,20 +7,11 @@ public class DifferentSummands {
         List<Integer> summands = new ArrayList<Integer>();
         //write your code here
         int left = n;
-        int i = 0;
-//        while(left > 0) {
-//        	if(left - (i + 1) > i + 1) {
-//        		i = i + 1;
-//        		summands.add(i);
-//        		left = left - i;
-//        	}
-//        	else break;
-//        }
-//        summands.add(left);
-        while(left - (i + 1) > i + 1) {
-        	i++;
+        int i = 1;
+        while(left - i > i ) {     	
         	summands.add(i);
         	left = left - i;
+        	i++;
         }
         summands.add(left);
         return summands;
