@@ -50,12 +50,12 @@ public class Closest {
     	return result;
     }
     
-    static double bruteForce(int[] x, int[] y, int n) {
+    static double bruteForce(Point[] points, int n) {
     	double minDist = Double.POSITIVE_INFINITY;
     	for(int i = 0; i < n; i++) {
     		for(int j = i + 1; j < n; j++) {
-    			Point p = new Point(x[i], y[i]);
-    			Point q = new Point(x[j], y[j]);
+    			Point p = points[i];
+    			Point q = points[j];
     			double dist = distance(p, q);
     			minDist = min(minDist, dist);
     		}
@@ -63,27 +63,19 @@ public class Closest {
     	return minDist;
     }
     
-    static double minimalDistance(Point[] PointsSortedByX, Point[] PointsSortedByY, int n) {
-    	int midIndex = n/2;
+    static double minimalDistance(Point[] PointsSortedByX, int a, int b, Point[] PointsSortedByY) {
+    	
+    	if(a - b <= 3) {
+    		return bruteForce(PointsSortedByY, b - a);
+    	}
+    	int midIndex = (b+a)/2;
     	Point midPoint = PointsSortedByX[midIndex];
-    	
-//    	Point[] leftPointsSortedX = Arrays.copyOfRange(PointsSortedByX, 0, midIndex);
-//    	Point[] rightPointsSortedX = Arrays.copyOfRange(PointsSortedByX, midIndex, size);
-        
-    	Point[] leftPointsSortedX = new Point[midIndex];
-    	Point[] rightPointsSortedX = new Point[n - midIndex];
-    	for(int i = 0; i < midIndex; i++) {
-    		leftPointsSortedX[i] = PointsSortedByX[i];
-    	}
-    	for(int i = midIndex; i < n; i++) {
-    		rightPointsSortedX[i - midIndex] = PointsSortedByX[i];
-    	}
-    	
-        Point[] leftPointsSortedY = new Point[midIndex];
-        Point[] rightPointsSortedY = new Point[n - midIndex];
+    	          	
+        Point[] leftPointsSortedY = new Point[midIndex - a];
+        Point[] rightPointsSortedY = new Point[b - midIndex];
                         
         int l = 0, r = 0;       
-        for(int i = 0; i < n; i++) {
+        for(int i = 0; i < b - a; i++) {
         	if(PointsSortedByY[i].x < midPoint.x){
         		leftPointsSortedY[l] =  PointsSortedByY[i];
         		l++;
@@ -94,13 +86,13 @@ public class Closest {
         	}
         }
         
-        double dl = minimalDistance(leftPointsSortedX, leftPointsSortedY, midIndex);
-        double dr = minimalDistance(rightPointsSortedX, rightPointsSortedY, n - midIndex);
+        double dl = minimalDistance(PointsSortedByX, a, midIndex, leftPointsSortedY);
+        double dr = minimalDistance(PointsSortedByX, midIndex, b, rightPointsSortedY);
         double d = min(dl, dr);
         
-        Point[] strip = new Point[n];
+        Point[] strip = new Point[b - a];
         int actualSize = 0;
-        for(int i = 0; i < n; i++) {
+        for(int i = 0; i < b - a; i++) {
         	if(Math.abs(PointsSortedByY[i].x - midPoint.x) <= d) {
         		strip[actualSize ++] = PointsSortedByY[i];
         	}
@@ -109,11 +101,7 @@ public class Closest {
         return stripMin(strip, actualSize, d);
     }
     
-    static double minimalDistance(int[] x, int y[], int n) {
-    	if(n <= 3) {
-    		return bruteForce(x, y, n);
-    	}
-    	
+    static double minimalDistance(int[] x, int y[], int n) {   	
         Point[] points = new Point[n];
         for(int i = 0; i < n; i++) {
         	points[i] = new Point(x[i], y[i]);
@@ -124,7 +112,7 @@ public class Closest {
     	Arrays.sort(PointsSortedByX, new compareByX());
     	Arrays.sort(PointsSortedByY, new compareByY());
         
-        return minimalDistance(PointsSortedByX, PointsSortedByY, n);        
+        return minimalDistance(PointsSortedByX, 0, n, PointsSortedByY);        
     
     }
     
