@@ -65,7 +65,7 @@ public class Closest {
     
     static double minimalDistance(Point[] PointsSortedByX, int a, int b, Point[] PointsSortedByY) {
     	
-    	if(a - b <= 3) {
+    	if(b - a <= 3) {
     		return bruteForce(PointsSortedByY, b - a);
     	}
     	int midIndex = (b+a)/2;

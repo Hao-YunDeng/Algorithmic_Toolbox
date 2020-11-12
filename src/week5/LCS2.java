@@ -6,7 +6,27 @@ public class LCS2 {
 
     private static int lcs2(int[] a, int[] b) {
         //Write your code here
-        return Math.min(a.length, b.length);
+    	//Recursion relation D[i][j] = max{D[i - 1][j - 1] + 1 if a[i] == b[j] else no plus 1, D[i - 1][j], D[i][j - 1]}
+  	  int[][] D = new int[a.length + 1][b.length + 1];
+  	  for(int i = 0; i <= a.length; i++) {
+  		  D[i][0] = 0;
+  	  }
+  	  for(int j = 0; j <= b.length; j++) {
+  		  D[0][j] = 0;
+  	  }
+  	  for(int i = 1; i <= a.length; i++) {
+  		  for(int j = 1; j <= b.length; j++) {
+  			  if(a[i - 1] == b[j - 1]) { 
+  				  D[i][j] = D[i - 1][j - 1] + 1;
+  			  }
+  			  else {
+  				  D[i][j] = D[i - 1][j - 1];
+  			  }
+  			  D[i][j] = Math.max(D[i][j], D[i - 1][j]);
+  			  D[i][j] = Math.max(D[i][j], D[i][j - 1]);
+  		  }
+  	  }
+  	  return D[a.length][b.length];
     }
 
     public static void main(String[] args) {
